@@ -403,7 +403,8 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     user: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.user'
-    >;
+    > &
+      Schema.Attribute.Required;
   };
 }
 

@@ -25,7 +25,8 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "projects"
+      "inversedBy": "projects",
+      "required": true
     }
   }
 }
