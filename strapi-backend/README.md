@@ -1,61 +1,76 @@
-# 🚀 Getting started with Strapi
+# Strapi Backend - Projects & Libraries
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+This Strapi v5 project manages users, their projects, and component libraries tied to those projects. Built with TypeScript and optimized for local development using SQLite.
 
-### `develop`
+## Current Data Models
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
+- ### Project
 
-```
+  Each project belongs to one user and may link to multiple libraries. Authenticated users can only access their own projects thanks to custom route policies.
+
+  - `name` (required)
+  - `description`
+  - `repository`
+  - `user` (required) → linked to User
+
+- ### Library
+  Each library can be linked to multiple projects.
+  - `name` (required) → gets capitalized on save
+  - `slug` → auto-generated from name if not set
+  - `projects` → linked to Project
+
+## Getting Started
+
+### Start in development mode (autoReload)
+
+```bash
 npm run develop
 # or
 yarn develop
 ```
 
-### `start`
+### Build admin panel (after changes)
 
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
-
-```
-npm run start
-# or
-yarn start
-```
-
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
-
-```
+```bash
 npm run build
 # or
 yarn build
 ```
 
-## ⚙️ Deployment
+### Start in production mode
 
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
-
+```bash
+npm run start
+# or
+yarn start
 ```
-yarn strapi deploy
-```
 
-## 📚 Learn more
+## Directory Structure
 
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
+Key folders and files:
 
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
+- `src/api/project` – "Project" content type
 
-## ✨ Community
+  - See ./routes/ and ./middlewares/ for logic enforcing project ownership and authorization
 
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+- `src/api/library` – "Library" content type
 
----
+- `src/document-service-middlewares.ts` – Handles document-related lifecycle logic
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+## Next Steps
+
+- **Enforce Required Relations**
+
+  Prevent saving Project or Library entries without required relations (e.g. user). May exploit plugin [Required Relation Field](https://market.strapi.io/plugins/strapi-plugin-required-relation-field).
+
+- **Track Permissions in Git**
+
+  Use plugin [Config Sync](https://market.strapi.io/plugins/strapi-plugin-config-sync) to sync User Permissions and other configuration to the repo.
+
+- **Add Unit Tests**
+
+  Introduce unit tests for lifecycle hooks, slug generation, and permission logic using [Jest](https://jestjs.io/).
+
+- **Create a Simple UI for Testing**
+
+  Build a minimal web UI using any framework (e.g. Vue, React, or Svelte) to test authentication and CRUD operations via the Strapi API.
